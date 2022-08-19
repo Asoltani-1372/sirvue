@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" translate="no">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#67b03d">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <style>
+    .preDiv {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .preDiv>p {
+      margin-left: auto;
+      margin-right: auto;
+      color: black;
+    }
+
+    .prelogo {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: -6rem;
+      width: 12rem;
+    }
+  </style>
+</head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MX32X51F9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-MX32X51F9R');
+</script>
+
+<body>
+  <noscript>
+    <div class="preDiv">
+      <img src="img/logo.png" class="prelogo" style="margin-bottom: 1rem; margin-top: auto;" />
+      <p style="margin-top: 1rem; margin-bottom: auto;">لطفا جاوا اسکریپت مرورگر خود را فعال نمایید</p>
+    </div>
+  </noscript>
+  <div id="app">
+    <div class="preDiv">
+      <img src="/img/logo.png" class="prelogo" />
+      <p>درحال بارگذاری ...</p>
+    </div>
+  </div>
+  <!-- built files will be auto injected -->
+</body>
+
+
+</html>

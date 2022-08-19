@@ -1,0 +1,235 @@
+<template>
+  <Card class="w-full">
+    <template #title>
+      <div class="flex justify-between">
+        <Skeleton width="10rem" v-if="fetching" />
+        <div v-else>تصویر کارت ملی</div>
+        <Skeleton width="4rem" v-if="fetching" />
+        <Tag
+          v-else-if="input && status"
+          :severity="status.severity"
+          :value="status.value"
+          class="whitespace-nowrap"
+        />
+      </div>
+    </template>
+    <template #subtitle>
+      <Skeleton width="15rem" v-if="fetching" />
+      <p v-else>این بخش اختیاری می باشد</p>
+    </template>
+    <template #content>
+      <div class="flex flex-col gap-12 justify-between">
+        <Skeleton height="16rem" v-if="fetching" />
+        <div class="upload-div" v-else>
+          <img :src="imageUrl" class="w-auto h-64 px-12" v-if="image" />
+          <div v-else>
+            <FileUpload
+              mode="basic"
+              name="file"
+              :url="$parent.rootUrl + '/api/upload?state=identity'"
+              accept="image/*"
+              :maxFileSize="20000000"
+              @before-send="beforeUpload($event)"
+              @upload="onUpload($event)"
+              @select="onSelect($event)"
+              :auto="true"
+              icon="pi pi-upload"
+              chooseLabel="بارگذاری تصویر کارت"
+              class="p-button-outlined"
+            />
+          </div>
+          <p class="text-xs text-red-600">{{ errors.image }}</p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <Skeleton height="3.125rem" v-if="fetching" />
+          <div v-else-if="status" class="flex justify-center gap-8">
+            <p>کد ملی :</p>
+            <p class="font-bold">{{ code }}</p>
+          </div>
+          <InputText
+            v-else
+            v-model="code"
+            :useGrouping="false"
+            placeholder="کد ملی را وارد نمایید"
+            class="w-full"
+            :class="{ 'p-invalid': errors.code }"
+            :disabled="loading"
+          />
+          <p class="text-xs text-red-600">{{ errors.code }}</p>
+        </div>
+      </div>
+    </template>
+    <template #footer>
+      <div class="flex justify-end gap-3">
+        <Button
+          label="پاک کردن"
+          class="p-button-text p-button-danger  p-button-sm"
+          icon="pi pi-trash"
+          v-if="(!status && image) || (status && status.type == 'rejected')"
+          @click="clearAll()"
+        />
+        <Skeleton height="3.125rem" width="3.87rem" v-if="fetching" />
+        <Button
+          class="p-button p-button-success p-button-sm"
+          label="ثبت"
+          @click="updateNationalCard()"
+          :disabled="
+            !image ||
+            !code ||
+            code.length != 10 ||
+            image.indexOf('blob:') > -1 ||
+            status
+          "
+          :loading="loading"
+          v-else-if="!status"
+        />
+      </div>
+    </template>
+  </Card>
+</template>
+
+<script>
+import IdentityService from "../../service/profile";
+export default {
+  props: ["input"],
+  data() {
+    return {
+      identityService: null,
+      fetching: true,
+      image: null,
+      code: null,
+      errors: {
+        code: ''
+      },
+      status: null,
+      loading: false,
+      statues: {
+        checking: {
+          value: "درحال بررسی",
+          severity: "warning",
+          type: "checking",
+        },
+        verified: { value: "احراز شده", severity: "success", type: "verified" },
+        rejected: { value: "رد شده", severity: "danger", type: "rejected" },
+      },
+      imageUrl: null,
+    };
+  },
+
+  created() {
+    this.identityService = new IdentityService();
+  },
+
+  methods: {
+    updateNationalCard() {
+      this.loading = true;
+      const data = {
+        image: this.image,
+        code: this.code,
+      };
+      this.identityService.updateNationalCard(
+        data,
+        () => {
+          this.$emit("call", "");
+          this.$toast.add({
+            severity: "success",
+            summary: "موفق",
+            detail: "کارت ملی با موفقیت ثبت شد.",
+            life: 3000,
+          });
+          this.status = this.statues.checking;
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+          this.$toast.add({
+            severity: "error",
+            summary: "خطا",
+            detail: error,
+            life: 3000,
+          });
+        }
+      );
+    },
+    clearAll() {
+      this.image = null;
+      this.code = null;
+      this.status = null;
+    },
+    onUpload(event) {
+      const xhr = event.xhr;
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        this.image = xhr.response;
+      } else {
+        this.$toast.add({
+          severity: "error",
+          summary: "خطا",
+          detail: "خطا بارگذاری تصویر",
+          life: 3000,
+        });
+        this.image = null;
+      }
+    },
+    beforeUpload(event) {
+      event.xhr.setRequestHeader(
+        "Authorization",
+        "Bearer " + localStorage.getItem("token")
+      );
+    },
+    onSelect(event) {
+      this.image = event.files[0].objectURL;
+    },
+     validateCode() {
+      const code = this.code;
+      console.log(code);
+      let sum = 0
+      for (let i = 0; i < code.length - 1; i++) {
+        const temp = code[i] * (10 - i);
+        sum += temp;
+      }
+      var div = sum % 11;
+      console.log(div);
+      if (div < 2 && div == code[9] || code[9] == 11 - div) {
+        this.errors.code = "";
+      } else {
+        this.errors.code = "کدملی وارد شده معتبر نیست";
+      }
+    },
+  },
+
+  watch: {
+    input(v) {
+      if (v) {
+        this.image = v.nationalCard;
+        this.code = v.nationalCode;
+        if (v.nationalCardStatus)
+          this.status = this.statues[v.nationalCardStatus];
+        this.fetching = false;
+      }
+    },
+    image(v) {
+      if (v) {
+        if (v.indexOf("blob:") > -1) this.imageUrl = v;
+        else this.imageUrl = this.$parent.rootUrl + "/uploads/" + v;
+      }
+    },
+    code(v) {
+      if (v && v.length == 10) {
+        this.validateCode();
+      } else {
+        this.errors.code = "";
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.upload-div {
+  @apply flex justify-center rounded-lg items-center h-64;
+}
+
+.upload-div > div {
+  @apply w-full h-full flex justify-center items-center border-dashed border-4 border-gray-200;
+}
+</style>

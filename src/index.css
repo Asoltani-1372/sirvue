@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: 'vazir';
+    src: url('assets/fonts/Vazir-FD-WOL.woff2') format('woff2'), url('assets/fonts/Vazir-FD-WOL.woff') format('woff'), url('assets/fonts/Vazir-FD-WOL.ttf') format('woff');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('assets/fonts/Vazir-Bold-FD-WOL.woff2') format('woff2'), url('assets/fonts/Vazir-Bold-FD-WOL.woff') format('woff'), url('assets/fonts/Vazir-Bold-FD-WOL.ttf') format('woff');
+    font-weight: bold;
+}
+
+
+@media screen and (max-width: 960px) {
+
+    .p-card-title .p-button-icon ~ .p-button-label{
+        @apply hidden;
+    }
+
+
+    .p-datatable tbody{
+        @apply flex flex-col gap-3 !important;
+    }
+
+    tbody > tr {
+        border-radius: 0.5rem !important;
+        background-color: #ffffff !important;    
+    }
+
+    .p-card-title{
+        border-radius: 0.5rem !important;
+        @apply bg-white p-4;
+    }
+    /* .p-card{
+        background-color: rgb(246, 248, 251)  !important;
+        box-shadow: none ;
+    } */
+
+    .p-card:is(){
+
+    } 
+
+    .p-card-content{
+        @apply pt-1 !important;
+    }
+    
+
+    .p-steps-title{
+        @apply text-center whitespace-normal !important;
+        
+    }
+
+    .p-toast{
+        @apply w-auto !important;
+    }
+    
+    .p-toast-top-left{
+        @apply right-5 !important;
+    }
+}
+
+
+.p-autocomplete-multiple-container{
+    @apply gap-2;
+}
+
+.p-column-header-content > span{
+    @apply  lg:hidden !important;
+}
+.p-autocomplete-token{
+    @apply ml-0;
+}
+
+p{
+    @apply whitespace-nowrap !important;
+}
+
+body {
+    font-family: vazir !important;
+    background-color: rgb(246, 248, 251);
+}
+
+.p-card {
+    @apply rounded-lg !important;
+}
+
+.p-toast-message-text {
+    font-family: vazir !important;
+    @apply m-0 mr-4 text-sm !important;
+}
+
+.p-toast-message-content,
+.p-toast-message {
+    border-width: 0 !important;
+}
+
+.error-text {
+    @apply text-xs py-2 text-red-500;
+}
+
+.p-input-icon-right>i:last-of-type {
+    @apply right-auto left-3 cursor-pointer !important;
+}
+
+.p-input-icon-right>.p-inputtext {
+    @apply pr-3;
+}
+
+.p-badge,
+input {
+    font-family: vazir !important;
+}
+
+.p-component,
+.p-chips-token {
+    font-family: vazir !important;
+}
+
+.p-inputtext:enabled:focus,
+.p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 1px #22c55e !important;
+    border-color: #1b9b4a !important;
+}
+
+.p-button:focus {
+    box-shadow: 0 0 0 0 !important;
+}
+
+.p-placeholder {
+    @apply text-gray-400 !important;
+}
+
+.p-datepicker-header > button {
+    @apply transform rotate-180 !important;
+}
+
+
+/* tired menu for account */
+
+.p-tieredmenu .p-menuitem-text {
+    @apply text-sm;
+}
+
+.p-button-icon-left {
+    @apply m-0 ml-2 !important;
+}
+
+.p-dropdown-label,
+.p-link {
+    font-family: vazir !important;
+}
+
+.p-inputswitch-checked .p-inputswitch-slider {
+    background: #1b9b4a !important;
+    @apply outline-none
+}
+
+.p-paginator {
+    direction: ltr;
+    @apply flex-row-reverse gap-px;
+}
+
+.p-paginator>button {
+    @apply transform rotate-180
+}
+
+.confirmation-content {
+    @apply gap-3
+}
+
+.p-datatable td {
+    @apply text-right !important;
+}
+
+.p-datatable-table th {
+    @apply  justify-between !important;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+    @apply text-gray-800 !important
+}
+
+.p-fileupload-buttonbar,
+.p-fileupload-content {
+    @apply bg-white border-0 !important;
+}
+
+.p-fileupload-buttonbar>span {
+    color: #ffffff;
+    background: #22C55E;
+    border: 1px solid #22C55E;
+}
+
+.p-fileupload-choose:not(.p-disabled):hover {
+    background: #16A34A;
+    color: #ffffff;
+    border-color: #16A34A;
+}
+
+.p-fileupload-row>div:last-child {
+    @apply text-left !important;
+}
+
+.router-link-active-exact{
+    @apply text-green-600 !important;
+}
+
+.p-card-body{
+    @apply flex flex-col h-full !important;
+}
+
+.p-card-footer{
+    @apply mt-auto !important;
+}
+
+* { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* .p-datepicker-calendar > thead{
+    @apply hidden;
+} */
